@@ -1,0 +1,9 @@
+.moc
+.obj
+.rcc
+.ui
+/Makefile
+/config.h
+/psi.app
+/psi
+
