@@ -7,6 +7,7 @@ include($$PWD/privacy/privacy.pri)
 include($$PWD/capabilities/capabilities.pri)
 include($$PWD/utilities/utilities.pri)
 include($$PWD/tabs/tabs.pri)
+include($$PWD/roster/gsoc.pri)
 
 # tools
 include($$PWD/tools/trayicon/trayicon.pri)
