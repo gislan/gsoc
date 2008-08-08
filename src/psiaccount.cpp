@@ -4914,5 +4914,8 @@ QList<PsiAccount::xmlRingElem> PsiAccount::dumpRingbuf()
 	return d->dumpRingbuf();
 }
 
+UserListItem PsiAccount::self() const {
+	return d->self;
+}
 
 #include "psiaccount.moc"
