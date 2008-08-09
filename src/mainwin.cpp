@@ -18,6 +18,11 @@
  *
  */
 
+namespace Roster {
+	class View;
+}
+using Roster::View;
+
 #include "mainwin.h"
 
 #include <qmessagebox.h>
@@ -36,6 +41,7 @@
 #include <QMenu>
 #include <QMenuItem>
 #include <QtAlgorithms>
+#include <QSplitter>
 
 #ifdef Q_WS_WIN
 #include <windows.h>
@@ -61,6 +67,8 @@
 #include "desktoputil.h"
 
 #include "mainwin_p.h"
+
+#include "roster/view.h"
 
 using namespace XMPP;
 
@@ -228,8 +236,8 @@ void MainWin::Private::updateMenu(QStringList actions, QMenu* menu)
 #define TOOLW_FLAGS ((Qt::WFlags) 0)
 #endif
 
-MainWin::MainWin(bool _onTop, bool _asTool, PsiCon* psi, const char* name)
-:AdvancedWidget<QMainWindow>(0, (_onTop ? Qt::WStyle_StaysOnTop : Qt::Widget) | (_asTool ? (Qt::WStyle_Tool |TOOLW_FLAGS) : Qt::Widget))
+MainWin::MainWin(bool _onTop, bool _asTool, PsiCon* psi, const char* name, View* v)
+:AdvancedWidget<QMainWindow>(0, (_onTop ? Qt::WStyle_StaysOnTop : Qt::Widget) | (_asTool ? (Qt::WStyle_Tool |TOOLW_FLAGS) : Qt::Widget)), view(v)
 {
 	setObjectName(name);
 	setAttribute(Qt::WA_AlwaysShowToolTips);
@@ -265,7 +273,12 @@ MainWin::MainWin(bool _onTop, bool _asTool, PsiCon* psi, const char* name)
 	setCentralWidget ( center );
 
 	d->vb_main = new QVBoxLayout(center);
+	QSplitter* splitter = new QSplitter(Qt::Vertical, center);
+
 	cvlist = new ContactView(center);
+	splitter->addWidget(cvlist);
+	splitter->addWidget(view);
+	view->resizeColumnToContents(0);	
 
 	int layoutMargin = 2;
 #ifdef Q_WS_MAC
@@ -291,7 +304,8 @@ MainWin::MainWin(bool _onTop, bool _asTool, PsiCon* psi, const char* name)
 	searchLayout->addWidget(d->searchPb);
 	d->searchWidget->setVisible(false);
 	//add contact view
-	d->vb_main->addWidget(cvlist);
+	//d->vb_main->addWidget(cvlist);
+	d->vb_main->addWidget(splitter);
 
 #ifdef Q_WS_MAC
 	// Disable the empty vertical scrollbar:
