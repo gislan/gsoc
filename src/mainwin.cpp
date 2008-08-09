@@ -69,6 +69,8 @@ using Roster::View;
 #include "mainwin_p.h"
 
 #include "roster/view.h"
+#include "roster/rosterinstance.h"
+#include "roster/rosterbuilder.h"
 
 using namespace XMPP;
 
@@ -236,8 +238,8 @@ void MainWin::Private::updateMenu(QStringList actions, QMenu* menu)
 #define TOOLW_FLAGS ((Qt::WFlags) 0)
 #endif
 
-MainWin::MainWin(bool _onTop, bool _asTool, PsiCon* psi, const char* name, View* v)
-:AdvancedWidget<QMainWindow>(0, (_onTop ? Qt::WStyle_StaysOnTop : Qt::Widget) | (_asTool ? (Qt::WStyle_Tool |TOOLW_FLAGS) : Qt::Widget)), view(v)
+MainWin::MainWin(bool _onTop, bool _asTool, PsiCon* psi, const char* name, RosterInstance* _ri)
+:AdvancedWidget<QMainWindow>(0, (_onTop ? Qt::WStyle_StaysOnTop : Qt::Widget) | (_asTool ? (Qt::WStyle_Tool |TOOLW_FLAGS) : Qt::Widget)), ri(_ri)
 {
 	setObjectName(name);
 	setAttribute(Qt::WA_AlwaysShowToolTips);
@@ -250,6 +252,8 @@ MainWin::MainWin(bool _onTop, bool _asTool, PsiCon* psi, const char* name, View*
 
 	d->onTop = _onTop;
 	d->asTool = _asTool;
+
+	view = ri->getView();
 
 	// sbState:
 	//   -1 : connect
@@ -279,6 +283,7 @@ MainWin::MainWin(bool _onTop, bool _asTool, PsiCon* psi, const char* name, View*
 	splitter->addWidget(cvlist);
 	splitter->addWidget(view);
 	view->resizeColumnToContents(0);	
+	splitter->moveSplitter(0, 100);
 
 	int layoutMargin = 2;
 #ifdef Q_WS_MAC
@@ -301,6 +306,7 @@ MainWin::MainWin(bool _onTop, bool _asTool, PsiCon* psi, const char* name, View*
 	d->searchPb->setText("X");
 	connect(d->searchPb,SIGNAL(clicked()),SLOT(searchClearClicked()));
 	connect(cvlist, SIGNAL(searchInput(const QString&)), SLOT(searchTextStarted(const QString&)));
+	connect(view, SIGNAL(searchInput(const QString&)), SLOT(searchTextStarted(const QString&)));
 	searchLayout->addWidget(d->searchPb);
 	d->searchWidget->setVisible(false);
 	//add contact view
@@ -439,10 +445,12 @@ void MainWin::registerAction( IconAction* action )
 		const char* slot;
 	} actionlist[] = {
 		{ "show_offline", toggled, cvlist, SLOT( setShowOffline(bool) ) },
+		{ "show_offline", toggled, ri->getRosterBuilder(), SLOT( setShowOffline(bool) ) },
 		{ "show_away",    toggled, cvlist, SLOT( setShowAway(bool) ) },
 		{ "show_hidden",  toggled, cvlist, SLOT( setShowHidden(bool) ) },
 		{ "show_agents",  toggled, cvlist, SLOT( setShowAgents(bool) ) },
 		{ "show_self",    toggled, cvlist, SLOT( setShowSelf(bool) ) },
+		{ "show_self",    toggled, ri->getRosterBuilder(), SLOT( setShowSelf(bool) ) },
 		{ "show_statusmsg", toggled, cvlist, SLOT( setShowStatusMsg(bool) ) },
 
 		{ "button_options", activated, this, SIGNAL( doOptions() ) },
@@ -1288,8 +1296,8 @@ void MainWin::searchTextEntered(QString const& text)
 	if (text.isEmpty()) {
 		searchClearClicked();
 	} else {
-		
 		cvlist->setFilter(text);
+		ri->getRosterBuilder()->setSearch(text);
 	}
 }
 
