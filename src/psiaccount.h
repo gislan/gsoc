@@ -145,13 +145,10 @@ public:
 	void dialogRegister(QWidget* w, const Jid& jid = Jid());
 	void dialogUnregister(QWidget* w);
 
-	void modify();
 	void changeVCard();
 	void changePW();
 	void doDisco();
 
-	void showXmlConsole();
-	void openAddUserDlg();
 	void openGroupChat(const Jid &, ActivationType activationType);
 	bool groupChatJoin(const QString &host, const QString &room, const QString &nick, const QString& pass, bool nohistory = false);
 	void groupChatSetStatus(const QString &host, const QString &room, const Status &);
@@ -208,7 +205,12 @@ signals:
 	void startBounce();
 
 public slots:
+	// method -> slot
+	void showXmlConsole();
+	void openAddUserDlg();
 	void changeStatus(int);
+	void modify();
+
 	void setStatus(const XMPP::Status &, bool withStatus = false);
 
 	void capsChanged(const Jid&);
