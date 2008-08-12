@@ -32,6 +32,8 @@
 #include "xmpp_status.h"
 #include "psiactions.h"
 
+#include "roster/rosteractionsservice.h"
+
 namespace XMPP
 {
 	class Jid;
@@ -87,7 +89,7 @@ class GoogleFileTransfer;
 // sick sick remove this someday please!
 struct GCContact;
 
-class PsiAccount : public QObject
+class PsiAccount : public QObject, public RosterActionsService
 {
 	Q_OBJECT
 public:
@@ -101,6 +103,11 @@ public:
 	bool isActive() const;
 	bool isConnected() const;
 	const QString &name() const;
+
+	void showXmlConsole();
+	void openAddUserDlg();
+	void changeStatus(int);
+	void modify();
 
 	const UserAccount & userAccount() const;
 	void setUserAccount(const UserAccount &);
@@ -205,12 +212,6 @@ signals:
 	void startBounce();
 
 public slots:
-	// method -> slot
-	void showXmlConsole();
-	void openAddUserDlg();
-	void changeStatus(int);
-	void modify();
-
 	void setStatus(const XMPP::Status &, bool withStatus = false);
 
 	void capsChanged(const Jid&);
