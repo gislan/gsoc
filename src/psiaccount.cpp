@@ -3235,7 +3235,7 @@ void PsiAccount::actionHistoryBox(PsiEvent *e)
 
 void PsiAccount::actionOpenChat(const Jid &j)
 {
-	UserListItem *u = find(j);
+	UserListItem *u = find(j.withResource(""));
 	if(!u)
 		return;
 
@@ -3278,7 +3278,7 @@ void PsiAccount::actionOpenChatSpecific(const Jid &j)
 #ifdef WHITEBOARDING
 void PsiAccount::actionOpenWhiteboard(const Jid &j)
 {
-	UserListItem *u = find(j);
+	UserListItem *u = find(j.withResource(""));
 	if(!u)
 		return;
 
@@ -4916,6 +4916,14 @@ QList<PsiAccount::xmlRingElem> PsiAccount::dumpRingbuf()
 
 UserListItem* PsiAccount::self() const {
 	return &(d->self);
+}
+
+void PsiAccount::actionSetManualAvatar(const Jid& jid, const QString& file) {
+	avatarFactory()->importManualAvatar(jid, file);
+}
+
+void PsiAccount::actionUnsetManualAvatar(const Jid& jid) {
+	avatarFactory()->removeManualAvatar(jid);
 }
 
 #include "psiaccount.moc"
