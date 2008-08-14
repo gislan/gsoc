@@ -33,6 +33,7 @@
 #include "psiactions.h"
 
 #include "roster/rosteractionsservice.h"
+#include "roster/viewdataservice.h"
 
 namespace XMPP
 {
@@ -89,7 +90,7 @@ class GoogleFileTransfer;
 // sick sick remove this someday please!
 struct GCContact;
 
-class PsiAccount : public QObject, public RosterActionsService
+class PsiAccount : public QObject, public RosterActionsService, public ViewDataService
 {
 	Q_OBJECT
 public:
