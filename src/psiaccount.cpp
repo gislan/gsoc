@@ -124,6 +124,7 @@
 #include "psicontactlist.h"
 #include "tabmanager.h"
 #include "fileutil.h"
+#include "bookmarkmanagedlg.h"
 
 #ifdef PSI_PLUGINS
 #include "pluginmanager.h"
@@ -4924,6 +4925,24 @@ void PsiAccount::actionSetManualAvatar(const Jid& jid, const QString& file) {
 
 void PsiAccount::actionUnsetManualAvatar(const Jid& jid) {
 	avatarFactory()->removeManualAvatar(jid);
+}
+
+bool PsiAccount::hasPep() const {
+	return d->pepAvailable;
+}
+
+QList<ConferenceBookmark> PsiAccount::conferences() {
+	return bookmarkManager()->conferences();
+}
+
+void PsiAccount::actionManageBookmarks() {
+	BookmarkManageDlg *dlg = findDialog<BookmarkManageDlg*>();
+	if(dlg) {
+		bringToFront(dlg);
+	} else {
+		dlg = new BookmarkManageDlg(this);
+		dlg->show();
+	}
 }
 
 #include "psiaccount.moc"

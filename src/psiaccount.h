@@ -104,6 +104,7 @@ public:
 	bool isActive() const;
 	bool isConnected() const;
 	const QString &name() const;
+	bool hasPep() const;
 
 	void showXmlConsole();
 	void openAddUserDlg();
@@ -197,6 +198,8 @@ public:
 	class xmlRingElem { public: int type; QDateTime time; QString xml; };
 	QList< xmlRingElem > dumpRingbuf();
 
+	QList<ConferenceBookmark> conferences();
+
 signals:
 	void disconnected();
 	void reconnecting();
@@ -285,6 +288,7 @@ public slots:
 	void actionSetMood();
 	void actionSetAvatar();
 	void actionUnsetAvatar();
+	void actionManageBookmarks();
 	void featureActivated(QString feature, Jid jid, QString node);
 
 	// for RosterActionsService
