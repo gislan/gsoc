@@ -602,6 +602,8 @@ void PsiCon::deinit()
 
 	d->idle.stop();
 
+	delete d->roster;
+
 	// shut down all accounts
 	UserAccountList acc;
 	if(d->contactList) {
