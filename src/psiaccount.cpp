@@ -1821,9 +1821,11 @@ void PsiAccount::client_rosterItemRemoved(const RosterItem &r)
 	}
 	// else remove them for good!
 	else {
+		emit removedContact(u);
 		d->cp->removeEntry(u->jid());
 		d->userList.removeRef(u);
 	}
+
 }
 
 void PsiAccount::tryVerify(UserListItem *u, UserResource *ur)
@@ -4958,6 +4960,26 @@ QStringList PsiAccount::groups() const {
 	}
 
 	return QStringList::fromSet(set);
+}
+
+void PsiAccount::actionGroupDelete(const QString& group) {
+	for ( uint i = 0; i < userList()->count(); i++ ) {
+		UserListItem* item = userList()->at(i);
+
+		if ( item->groups().contains(group) ) {
+			actionGroupRemove(item->jid(), group);
+		}
+	}
+}
+
+void PsiAccount::actionGroupDeleteAll(const QString& group) {
+	for ( uint i = 0; i < userList()->count(); i++ ) {
+		UserListItem* item = userList()->at(i);
+
+		if ( item->groups().contains(group) ) {
+			actionRemove(item->jid());
+		}
+	}
 }
 
 #include "psiaccount.moc"
