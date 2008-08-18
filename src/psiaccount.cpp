@@ -3239,7 +3239,7 @@ void PsiAccount::actionHistoryBox(PsiEvent *e)
 
 void PsiAccount::actionOpenChat(const Jid &j)
 {
-	UserListItem *u = find(j.withResource(""));
+	UserListItem *u = find(j);
 	if(!u)
 		return;
 
