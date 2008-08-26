@@ -2009,7 +2009,7 @@ ContactView::ContactView(QWidget *parent, const char *name)
 	v_showHidden = PsiOptions::instance()->getOption("options.ui.contactlist.show.hidden-contacts-group").toBool();
 	v_showAgents = PsiOptions::instance()->getOption("options.ui.contactlist.show.agent-contacts").toBool();
 	v_showSelf = PsiOptions::instance()->getOption("options.ui.contactlist.show.self-contact").toBool();
-	v_showStatusMsg = PsiOptions::instance()->getOption("options.ui.contactlist.status-messages.show").toBool();
+	v_showStatusMsg = PsiOptions::instance()->getOption("options.ui.contactlist.show-status-messages").toBool();
 
 
 	d->lastSize = QSize( 0, 0 );
@@ -2278,8 +2278,8 @@ void ContactView::setShowStatusMsg(bool x)
 {
 	if (v_showStatusMsg != x) {
 		v_showStatusMsg = x;
-		PsiOptions::instance()->setOption("options.ui.contactlist.status-messages.show",x);
-		emit showStatusMsg(v_showStatusMsg);
+//		PsiOptions::instance()->setOption("options.ui.contactlist.show-status-messages",x);
+//		emit showStatusMsg(v_showStatusMsg);
 		
 		Q3PtrListIterator<ContactProfile> it(d->profiles);
 		for(ContactProfile *cp; (cp = it.current()); ++it) {
@@ -2739,14 +2739,14 @@ RichListViewItem::RichListViewItem( Q3ListView * parent ) : Q3ListViewItem(paren
 {
 	v_rt = 0;
 	v_active = v_selected = false;
-	v_rich = !PsiOptions::instance()->getOption("options.ui.contactlist.status-messages.single-line").toBool();
+	v_rich = !PsiOptions::instance()->getOption("options.ui.contactlist.slim-contacts").toBool();
 }
 
 RichListViewItem::RichListViewItem( Q3ListViewItem * parent ) : Q3ListViewItem(parent)
 {
 	v_rt = 0;
 	v_active = v_selected = false;
-	v_rich = !PsiOptions::instance()->getOption("options.ui.contactlist.status-messages.single-line").toBool();
+	v_rich = !PsiOptions::instance()->getOption("options.ui.contactlist.slim-contacts").toBool();
 }
 
 RichListViewItem::~RichListViewItem()
@@ -2949,7 +2949,7 @@ ContactViewItem::ContactViewItem(const QString &profileName, ContactProfile *cp,
 	d->profileName = profileName;
 	d->alerting = false;
 	d->ssl = false;
-	d->status_single = !PsiOptions::instance()->getOption("options.ui.contactlist.status-messages.single-line").toBool();
+	d->status_single = !PsiOptions::instance()->getOption("options.ui.contactlist.slim-contacts").toBool();
 
 	setProfileState(STATUS_OFFLINE);
 	if (!PsiOptions::instance()->getOption("options.ui.account.single").toBool())
@@ -2966,7 +2966,7 @@ ContactViewItem::ContactViewItem(const QString &groupName, int groupType, Contac
 	d->groupName = groupName;
 	d->groupType = groupType;
 	d->alerting = false;
-	d->status_single = !PsiOptions::instance()->getOption("options.ui.contactlist.status-messages.single-line").toBool();
+	d->status_single = !PsiOptions::instance()->getOption("options.ui.contactlist.slim-contacts").toBool();
 
 	drawGroupIcon();
 	resetGroupName();
@@ -2983,7 +2983,7 @@ ContactViewItem::ContactViewItem(const QString &groupName, int groupType, Contac
 	d->groupName = groupName;
 	d->groupType = groupType;
 	d->alerting = false;
-	d->status_single = !PsiOptions::instance()->getOption("options.ui.contactlist.status-messages.single-line").toBool();
+	d->status_single = !PsiOptions::instance()->getOption("options.ui.contactlist.slim-contacts").toBool();
 
 	drawGroupIcon();
 	resetGroupName();
@@ -3004,7 +3004,7 @@ ContactViewItem::ContactViewItem(UserListItem *u, ContactProfile *cp, ContactVie
 	d->u = u;
 	d->alerting = false;
 	d->animatingNick = false;
-	d->status_single = !PsiOptions::instance()->getOption("options.ui.contactlist.status-messages.single-line").toBool();
+	d->status_single = !PsiOptions::instance()->getOption("options.ui.contactlist.slim-contacts").toBool();
 
 	cacheValues();
 
